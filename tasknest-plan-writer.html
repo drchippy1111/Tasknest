@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Business Plan Writer</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    h1 { color: #333; }
+    textarea, button, input {
+      width: 100%;
+      max-width: 600px;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover { background-color: #0056b3; }
+    #output {
+      background: white;
+      padding: 15px;
+      border: 1px solid #ccc;
+      white-space: pre-wrap;
+      margin-top: 20px;
+      max-width: 800px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>AI Business Plan Writer</h1>
+
+  <label for="bizIdea">Describe Your Business Idea:</label>
+  <textarea id="bizIdea" rows="6" placeholder="E.g., A task management platform for digital teams..."></textarea>
+  <button onclick="generatePlan()">Generate Business Plan</button>
+
+  <div id="output"></div>
+
+  <script>
+    function generatePlan() { document.getElementById('output').innerText = plan;
+    }
+  </script>
+
+</body>
+</html>

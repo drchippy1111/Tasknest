@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskNest | Home</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; color: #333; }
+    header { background: #3c4cad; color: #fff; padding: 30px 20px; text-align: center; }
+    header img { width: 50px; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; background: #fff; padding: 20px; gap: 15px; }
+    nav a { text-decoration: none; background: #3c4cad; color: #fff; padding: 12px 20px; border-radius: 5px; transition: 0.3s; }
+    nav a:hover { background: #2a3580; }
+    section { max-width: 900px; margin: auto; padding: 30px 20px; text-align: center; }
+    footer { background: #3c4cad; color: white; text-align: center; padding: 15px; font-size: 14px; }
+    @media (max-width: 600px) {
+      nav { flex-direction: column; align-items: center; }
+      nav a { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+   <!-- Splash screen showing logo -->
+  <div id="splash" style="position:fixed; top:0; left:0; right:0; bottom:0; background:#fff; display:flex; align-items:center; justify-content:center; z-index:9999;">
+    <img src="assets/IMG-20251014-WA0001(1).jpg" alt="TaskNest" width="180" />
+  </div>
+
+  <!-- Main app container (initially hidden) -->
+  <div id="app" style="display:none;">
+    <!-- Your actual app content goes here -->
+  </div>
+
+  <script>
+    // Wait 5 seconds then show the app
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+      }, 2000);
+    };
+  </script>
+</body>
+
+  <header>
+    <img src="assets/IMG-20251014-WA0001(1).jpg" alt="TaskNest" />
+    <h1>Welcome to TaskNest</h1>
+    <p>Your all-in-one smart business & productivity hub</p>
+  </header>
+
+  <nav>
+    <a href="tasknest-auth.html">Login</a>
+    <a href="tasknest-register.html">Register</a>
+    <a href="tasknest-taskmanager.html">Task Manager</a>
+    <a href="tasknest-balance-sheet.html">Finance</a>
+    <a href="tasknest-collab-hub.html">Collaborate</a>
+    <a href="tasknest-ads.html">Post Ads</a>
+    <a href="tasknest-plan-writer.html">AI Plan Writer</a>
+  </nav>
+
+  <section>
+    <h2>Boost Your Productivity</h2>
+    <p>Manage tasks, create business plans, post ads, track finances, and collaborate in one place — TaskNest simplifies it all.</p>
+    <p>Join entrepreneurs, startups, and creators already building with TaskNest.</p>
+  </section>
+
+  <footer>
+    &copy; 2025 TaskNest Inc. | All rights reserved
+  </footer>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(function (registration) {
+            console.log('✅ ServiceWorker registered with scope:', registration.scope);
+          })
+          .catch(function (error) {
+          console.error('❌ ServiceWorker registration failed:', error);
+          });
+      });
+    }
+  </script>
+
+</body>
+</html>

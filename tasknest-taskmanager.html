@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskNest Smart Task Manager</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+    header { background: #3c4cad; color: white; padding: 20px; text-align: center; }
+    #task-container { max-width: 800px; margin: 30px auto; background: white; padding: 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    h2 { margin-top: 0; }
+    input, select { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+    button { padding: 10px 20px; background: #3c4cad; color: white; border: none; cursor: pointer; }
+    .task { padding: 10px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; }
+    .done { text-decoration: line-through; color: gray; }
+    .tag { font-size: 12px; background: #e0e0e0; padding: 2px 6px; border-radius: 4px; margin-left: 10px; }
+    .task-buttons button { margin-left: 5px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Smart Task Manager</h1>
+    <p>Plan, Track, and Complete Smart Tasks</p>
+  </header>
+    <div id="task-container">
+    <h2>Add New Task</h2>
+    <input type="text" id="taskInput" placeholder="Enter task title">
+    <input type="text" id="taskDesc" placeholder="Task description (optional)">
+    <select id="priority">
+      <option value="Normal">Normal Priority</option>
+      <option value="High">High Priority</option>
+    </select>
+    <button onclick="addTask()">Add Task</button>
+
+    <h2>Tasks</h2>
+    <div id="taskList"></div>
+  </div>
+
+  <script>
+    let tasks = [];
+
+    function addTask() {
+      const title = document.getElementById('taskInput').value.trim();
+      const desc = document.getElementById('taskDesc').value.trim();
+      const priority = document.getElementById('priority').value;
+
+      if (title === '') return alert("Task title is required");
+
+      const task = {
+        id: Date.now(),
+        title,
+        desc,
+        priority,
+        done: false
+      };
+
+      tasks.push(task);
+      document.getElementById('taskInput').value = '';
+      document.getElementById('taskDesc').value = '';
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const list = document.getElementById('taskList');
+      list.innerHTML = '';
+
+      tasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = 'task';
+        if (task.done) div.classList.add('done');
+
+        div.innerHTML = `
+          <div>
+            <strong>task.title</strong>{task.desc ? ` - task.desc` : ”
+            <span class="tag">{task.priority}</span>
+          </div>
+          <div class="task-buttons">
+            <button onclick="toggleDone(task.id)">{task.done ? 'Undo' : 'Done'}</button>
+            <button onclick="deleteTask(${task.id})">Delete</button>
+          </div>
+        `;
+
+        list.appendChild(div);
+      });
+    }
+
+    function toggleDone(id) {
+      tasks = tasks.map(t => t.id === id ? {...t, done: !t.done} : t);
+      renderTasks();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      renderTasks();
+    }
+  </script>
+
+</body>
+</html>

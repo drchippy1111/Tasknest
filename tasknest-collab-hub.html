@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskNest Collaboration Hub</title>
+  <style>
+    body { font-family: Arial; margin: 0; background: #f4f4f4; }
+    header { background: #3c4cad; color: #fff; padding: 15px; text-align: center; }
+    #collab-container { display: flex; flex-direction: column; padding: 20px; max-width: 800px; margin: auto; }
+    #chat-box { border: 1px solid #ccc; background: #fff; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 15px; }
+    #msg-form { display: flex; }
+    #msg-input { flex: 1; padding: 10px; font-size: 16px; }
+    #send-btn { padding: 10px 20px; background: #3c4cad; color: #fff; border: none; cursor: pointer; }
+    .msg { margin: 5px 0; }
+    .you { text-align: right; color: #3c4cad; }
+    .other { text-align: left; color: #444; }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Collaboration Hub</h2>
+    <p>Chat & collaborate with your team in real time</p>
+  </header>
+
+  <div id="collab-container">
+    <div id="chat-box"></div>
+     <form id="msg-form" onsubmit="sendMessage(event)">
+      <input type="text" id="msg-input" placeholder="Type your message..." required />
+      <button id="send-btn">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById('chat-box');
+
+    function sendMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('msg-input');
+      const message = input.value.trim();
+      if (message === '') return;
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'msg you';
+      msgDiv.textContent = "You: " + message;
+      chatBox.appendChild(msgDiv);
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Simulate a reply
+      setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = 'msg other';
+        reply.textContent = "Teammate: Got it!";
+        chatBox.appendChild(reply);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+
+{
+  "name": "TaskNest",
+  "short_name": "TaskNest",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#3c4cad",
+  "theme_color": "#3c4cad",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

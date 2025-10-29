@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login & Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f5;
+      padding: 20px;
+    }
+    h2 { color: #333; }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .hidden { display: none; }
+    .message { color: green; margin-top: 10px; }
+    .error { color: red; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+<h2 id="formTitle">Login</h2>
+
+  <div id="loginForm">
+    <input type="text" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div class="switch">
+      New user? <a href="#" onclick="switchForm('register')">Register here</a>
+    </div>
+    <div id="loginMsg"></div>
+  </div>
+
+  <div id="registerForm" class="hidden">
+    <input type="text" id="regEmail" placeholder="Email">
+    <input type="password" id="regPassword" placeholder="Password">
+    <input type="password" id="regConfirm" placeholder="Confirm Password">
+    <button onclick="register()">Register</button>
+    <div class="switch">
+      Already have an account? <a href="#" onclick="switchForm('login')">Login here</a>
+    </div>
+    <div id="regMsg"></div>
+  </div>
+</div>
+
+<script>
+  function switchForm(type) {
+    if (type === 'register') {
+      document.getElementById('registerForm').classList.remove('hidden');
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('formTitle').innerText = 'TaskNest Registration';
+    } else {
+      document.getElementById('registerForm').classList.add('hidden');
+      document.getElementById('loginForm').classList.remove('hidden');
+      document.getElementById('formTitle').innerText = 'TaskNest Login';
+    }
+    clearMessages();
+  }
+
+  function clearMessages() {
+    document.getElementById('loginMsg').innerHTML = '';
+    document.getElementById('regMsg').innerHTML = '';
+  }
+
+  function register() {
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+
+    if (!email || !pass || !confirm) {
+      showMessage('regMsg', 'All fields are required.', true);
+      return;
+    }
+
+    if (pass !== confirm) {
+      showMessage('regMsg', 'Passwords do not match.', true);
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('tasknest_users')) || {};
+    if (users[email]) {
+      showMessage('regMsg', 'Email already registered.', true);
+      return;
+    }
+
+    users[email] = { password: pass };
+    localStorage.setItem('tasknest_users', JSON.stringify(users));
+    showMessage('regMsg', 'Registration successful! You can now log in.', false);
+    document.getElementById('regEmail').value = '';
+    document.getElementById('regPassword').value = '';
+    document.getElementById('regConfirm').value = '';
+  }
+
+  function login() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPassword').value;
+
+    let users = JSON.parse(localStorage.getItem('tasknest_users')) || {};
+    if (!users[email] || users[email].password !== pass) {
+      showMessage('loginMsg', 'Invalid email or password.', true);
+      return;
+    }
+
+    localStorage.setItem('tasknest_current_user', email);
+    showMessage('loginMsg', `Welcome back, email! Login successful.`, false);
+    document.getElementById('loginEmail').value = ”;
+    document.getElementById('loginPassword').value = ”;
+  
+
+  function showMessage(id, msg, isError) 
+    const div = document.getElementById(id);
+    div.innerHTML = `<p class="{isError ? 'error' : 'message'}">${msg}</p>`;
+  }
+</script>
+
+</body>
+</html>

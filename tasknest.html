@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+    h1, h2 { color: #333; }
+    nav button { margin: 5px; padding: 10px; }
+    section { display: none; margin-top: 20px; }
+    .active { display: block; }
+    input, textarea, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 500px;
+      box-sizing: border-box;
+    }
+    ul { list-style: none; padding: 0; }
+    li { background: #fff; padding: 10px; margin: 10px 0; border-radius: 6px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    td, th { border: 1px solid #ccc; padding: 8px; }
+  </style>
+</head>
+<body>
+  <!-- Splash screen showing logo -->
+  <div id="splash" style="position:fixed; top:0; left:0; right:0; bottom:0; background:#fff; display:flex; align-items:center; justify-content:center; z-index:9999;">
+    <img src="assets/IMG-20251014-WA0001(1).jpg" alt="TaskNest" width="180" />
+  </div>
+
+  <!-- Main app container (initially hidden) -->
+  <div id="app" style="display:none;">
+    <!-- Your actual app content goes here -->
+  </div>
+
+  <script>
+    // Wait 2 seconds then show the app
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+      }, 2000);
+    };
+  </script>
+</body>
+
+<h1>Dashboard</h1>
+
+<!-- Navigation -->
+<nav>
+  <button onclick="showSection('tasks')">Task Manager</button>
+  <button onclick="showSection('balance')">Balance Sheet</button>
+  <button onclick="showSection('aiWriter')">AI Business Plan Writer</button>
+  <button onclick="showSection('ads')">Ads Posting</button>
+</nav>
+
+<!-- Task Manager -->
+<section id="tasks" class="active">
+  <h2>Tasks</h2>
+  <form id="taskForm">
+    <input type="text" id="title" placeholder="Task Title" required />
+    <input type="text" id="assignee" placeholder="Assigned To" required />
+    <input type="date" id="dueDate" placeholder="DD/MM/YYYY" required />
+    <button type="submit">Add Task</button>
+  </form>
+  <ul id="taskList"></ul>
+</section>
+
+<!-- Balance Sheet -->
+<section id="balance">
+  <h2>Balance Sheet</h2>
+  <input id="asset" placeholder="Asset Name" />
+  <input id="assetVal" type="number" placeholder="Asset Value" />
+  <input id="liability" placeholder="Liability Name" />
+  <input id="liabilityVal" type="number" placeholder="Liability Value" />
+  <button onclick="addBalance()">Add to Sheet</button>
+  <table>
+    <thead><tr><th>Type</th><th>Name</th><th>Value</th></tr></thead>
+    <tbody id="balanceTable"></tbody>
+    <tfoot>
+      <tr><td colspan="2">Total Assets</td><td id="assetTotal">0</td></tr>
+      <tr><td colspan="2">Total Liabilities</td><td id="liabilityTotal">0</td></tr>
+      <tr><td colspan="2"><strong>Equity</strong></td><td id="equity">0</td></tr>
+    </tfoot>
+  </table>
+</section>
+
+<!-- AI Business Plan Writer -->
+<section id="aiWriter">
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    tasks.push(task);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks();
+    form.reset();
+  });
+
+  function renderTasks() {
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    list.innerHTML = '';
+    tasks.forEach((t, i) => {
+      list.innerHTML += `<li>t.title -{t.assignee} - t.due -{t.status}
+      t.status !== 'Completed' ? `<button onclick="markDone({i})">Done</button>` : ''}</li>`;
+    });
+  }
+
+  function markDone(index) {
+    const tasks = JSON.parse(localStorage.getItem('tasks'));
+    tasks[index].status = 'Completed';
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks();
+  }
+
+  renderTasks();
+
+  // Balance Sheet
+  let balanceData = JSON.parse(localStorage.getItem('balance')) || {
+  assets: [],
+  liabilities: []
+};
+
+function addBalance() {
+  const assetName = document.getElementById('asset').value;
+  const assetVal = Number(document.getElementById('assetVal').value);
+  const liabilityName = document.getElementById('liability').value;
+  const liabilityVal = Number(document.getElementById('liabilityVal').value);
+  const table = document.getElementById('balanceTable');
+
+  if (assetName && assetVal) {
+    balanceData.assets.push({ name: assetName, value: assetVal });
+  }
+  if (liabilityName && liabilityVal) {
+    balanceData.liabilities.push({ name: liabilityName, value: liabilityVal });
+  }
+
+  localStorage.setItem('balance', JSON.stringify(balanceData));
+  renderBalance();
+}
+let assets = 0, liabilities = 0;
+  const table = document.getElementById('balanceTable');
+  table.innerHTML = ”;
+
+  balanceData.assets.forEach(a => 
+    assets += a.value;
+    table.innerHTML += `<tr><td>Asset</td><td>{a.name}</td><td>a.value</td></tr>`;
+  );
+
+  balanceData.liabilities.forEach(l => 
+    liabilities += l.value;
+    table.innerHTML += `<tr><td>Liability</td><td>{l.name}</td><td>${l.value}</td></tr>`;
+  });
+
+  document.getElementById('assetTotal').innerText = assets;
+  document.getElementById('liabilityTotal').innerText = liabilities;
+  document.getElementById('equity').innerText = assets - liabilities;
+}
+
+renderBalance(); // Call on load
+  <h2>AI Business Plan Writer</h2>
+  <textarea id="bizIdea" placeholder="Describe your business idea..." rows="5"></textarea>
+  <button onclick="generatePlan()">Generate Business Plan</button>
+  <h3>Output:</h3>
+  <div id="aiOutput" style="white-space: pre-wrap; background:#fff; padding:10px; border:1px solid #ccc;"></div>
+</section>
+
+<!-- Ads Posting -->
+<section id="ads">
+  <h2>Ads Posting</h2>
+  <form id="adForm">
+    <input type="text" id="adTitle" placeholder="Ad Title" required />
+    <textarea id="adContent" placeholder="Write your ad content..." rows="4" required></textarea>
+    <button type="submit">Post Ad</button>
+  </form>
+  <h3>Posted Ads</h3>
+  <ul id="adsList"></ul>
+</section>
+
+<!-- Script -->
+<script>
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  // Task Logic
+  const form = document.getElementById('taskForm');
+  const list = document.getElementById('taskList');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const task = {
+      title: title.value,
+      assignee: assignee.value,
+      due: dueDate.value,
+      status: 'Pending'
+    };
+    table.innerHTML += `<tr><td>Asset</td><td>assetName</td><td>{assetVal}</td></tr>`;
+    }
+
+    if (liabilityName && liabilityVal) {
+      liabilities += liabilityVal;
+      table.innerHTML += `<tr><td>Liability</td><td>liabilityName</td><td>{liabilityVal}</td></tr>`;
+    }
+
+    document.getElementById('assetTotal').innerText = assets;
+    document.getElementById('liabilityTotal').innerText = liabilities;
+    document.getElementById('equity').innerText = assets - liabilities;
+
+    document.getElementById('asset').value = '';
+    document.getElementById('assetVal').value = '';
+    document.getElementById('liability').value = '';
+    document.getElementById('liabilityVal').value = '';
+  }
+
+  // AI Business Plan (mock)
+  function generatePlan() {
+    const idea = document.getElementById('bizIdea').value;
+    if (!idea) return alert("Enter your idea first.");
+    const output = `
+BUSINESS PLAN (Auto-generated)
+document.getElementById('aiOutput').innerText = output;
+  
+
+  // Ads
+  document.getElementById('adForm').addEventListener('submit', function(e) 
+    e.preventDefault();
+    const title = document.getElementById('adTitle').value;
+    const content = document.getElementById('adContent').value;
+    const ads = JSON.parse(localStorage.getItem('ads') || '[]');
+    ads.push( title, content );
+    localStorage.setItem('ads', JSON.stringify(ads));
+    renderAds();
+    this.reset();
+  );
+
+  function renderAds() 
+    const ads = JSON.parse(localStorage.getItem('ads') || '[]');
+    const list = document.getElementById('adsList');
+    list.innerHTML = ”;
+    ads.forEach(ad => 
+      list.innerHTML += `<li><strong>{ad.title}</strong><br>${ad.content}</li>`;
+    });
+  }
+
+  renderAds();
+</script>
+
+</body>
+</html>

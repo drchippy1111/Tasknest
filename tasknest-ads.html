@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskNest Ad Posting</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 20px;
+    }
+    h1 { color: #222; }
+    input, textarea, button {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px;
+      margin: 5px 0 15px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .ad-list {
+      max-width: 700px;
+      margin-top: 30px;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+    }
+    .ad {
+      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+    }
+    .ad:last-child {
+      border-bottom: none;
+    }
+    .ad h3 {
+      margin: 0 0 5px;
+    }
+    .ad img {
+      max-width: 100%;
+      margin-top: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Ads Posting</h1>
+
+  <input type="text" id="adTitle" placeholder="Ad Title" />
+  <textarea id="adContent" rows="4" placeholder="Ad Description or Content"></textarea>
+  <input type="file" id="adImage" accept="image/*" />
+  <button onclick="postAd()">Post Ad</button>
+
+  <div class="ad-list" id="adList">
+    <!-- Ads will be shown here -->
+  </div>
+
+  <script>
+    let ads = JSON.parse(localStorage.getItem("tasknest_ads")) || [];
+
+    function postAd() {
+      const title = document.getElementById("adTitle").value.trim();
+      const content = document.getElementById("adContent").value.trim();
+      const imageInput = document.getElementById("adImage");
+      const file = imageInput.files[0];
+
+      if (!title || !content) {
+        alert("Please fill in the title and content.");
+        return;
+      }
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          saveAd(title, content, e.target.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        saveAd(title, content, null);
+      }
+    }
+
+    function saveAd(title, content, image) {
+      const newAd = { title, content, image };
+      ads.unshift(newAd);
+      localStorage.setItem("tasknest_ads", JSON.stringify(ads));
+      document.getElementById("adTitle").value = "";
+      document.getElementById("adContent").value = "";
+      document.getElementById("adImage").value = "";
+      renderAds();
+    }
+
+    function renderAds() {
+      const adList = document.getElementById("adList");
+      adList.innerHTML = ads.map(ad => `
+        <div class="ad">
+          <h3>ad.title</h3>
+          <p>{ad.content}</p>
+          ad.image ? `<img src="{ad.image}" alt="Ad Image">` : ''}
+        </div>
+      `).join("");
+    }
+
+    renderAds();
+  </script>
+
+</body>
+</html>

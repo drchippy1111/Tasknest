@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskNest Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f5;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h2 { text-align: center; color: #333; }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+    .message { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Register</h2>
+  <input type="email" id="email" placeholder="Gmail Address (example@gmail.com)" />
+  <input type="tel" id="phone" placeholder="Phone Number (e.g. 08012345678)" />
+  <input type="password" id="password" placeholder="Create Password" />
+  <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+  <button onclick="register()">Register</button>
+  <div id="msg"></div>
+</div>
+
+<script>
+  function register() {
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value;
+    const confirm = document.getElementById("confirmPassword").value;
+    const msg = document.getElementById("msg");
+
+    if (!email || !phone || !password || !confirm) {
+      msg.innerHTML = `<p class="error">All fields are required.</p>`;
+      return;
+    }
+
+    if (!email.endsWith("@gmail.com")) {
+      msg.innerHTML = `<p class="error">Only Gmail addresses are allowed.</p>`;
+      return;
+    }
+
+    if (password !== confirm) {
+      msg.innerHTML = `<p class="error">Passwords do not match.</p>`;
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem("tasknest_users")) || {};
+
+    if (users[email]) {
+      msg.innerHTML = `<p class="error">Email already registered.</p>`;
+      return;
+    }
+
+    users[email] = { phone, password };
+    localStorage.setItem("tasknest_users", JSON.stringify(users));
+    msg.innerHTML = `<p class="message">Registration successful. You can now log in.</p>`;
+
+    document.getElementById("email").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("confirmPassword").value = "";
+  }
+</script>
+
+</body>
+</html>

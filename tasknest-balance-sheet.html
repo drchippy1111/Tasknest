@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Balance Sheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    h1 { color: #333; }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    table {
+      width: 100%;
+      max-width: 800px;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+    tfoot td {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Balance Sheet</h1>
+
+  <h3>Add Asset</h3>
+  <input type="text" id="assetName" placeholder="Asset Name" />
+  <input type="number" id="assetValue" placeholder="Asset Value" />
+  <button onclick="addEntry('asset')">Add Asset</button>
+
+  <h3>Add Liability</h3>
+  <input type="text" id="liabilityName" placeholder="Liability Name" />
+  <input type="number" id="liabilityValue" placeholder="Liability Value" />
+  <button onclick="addEntry('liability')">Add Liability</button>
+
+  <h3>Balance Sheet</h3>
+  <table>
+    <thead>
+      <tr><th>Type</th><th>Name</th><th>Value</th></tr>
+    </thead>
+    <tbody id="balanceTable"></tbody>
+    <tfoot>
+      <tr><td colspan="2">Total Assets</td><td id="assetTotal">0</td></tr>
+      <tr><td colspan="2">Total Liabilities</td><td id="liabilityTotal">0</td></tr>
+      <tr><td colspan="2">Equity (Assets - Liabilities)</td><td id="equity">0</td></tr>
+    </tfoot>
+  </table>
+
+  <script>
+    let data = JSON.parse(localStorage.getItem("tasknest_balance")) || {
+      assets: [],
+      liabilities: []
+    };
+
+    function saveData() {
+      localStorage.setItem("tasknest_balance", JSON.stringify(data));
+    }
+
+    function render() {
+      const table = document.getElementById("balanceTable");
+      let assetSum = 0;
+      let liabilitySum = 0;
+      table.innerHTML = "";
+
+      data.assets.forEach(a => {
+        assetSum += a.value;
+        table.innerHTML += `<tr><td>Asset</td><td>a.name</td><td>{a.value}</td></tr>`;
+      });
+      data.liabilities.forEach(l => {
+        liabilitySum += l.value;
+        table.innerHTML += `<tr><td>Liability</td><td>l.name</td><td>{l.value}</td></tr>`;
+      });
+
+      document.getElementById("assetTotal").innerText = assetSum;
+      document.getElementById("liabilityTotal").innerText = liabilitySum;
+      document.getElementById("equity").innerText = assetSum - liabilitySum;
+    }
+
+    function addEntry(type) {
+      const name = document.getElementById(`typeName`).value;
+      const value = parseFloat(document.getElementById(`{type}Value`).value);
+
+      if (!name || isNaN(value)) {
+        alert("Please enter a valid name and value.");
+        return;
+      }
+
+      data[type + "s"].push({ name, value });
+      saveData();
+      render();
+
+      document.getElementById(`typeName`).value = "";
+      document.getElementById(`{type}Value`).value = "";
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
